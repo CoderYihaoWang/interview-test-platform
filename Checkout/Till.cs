@@ -6,81 +6,24 @@ namespace Checkout
 {
     public class Till
     {
-
-        private Dictionary<char, int> _items = new Dictionary<char, int>{
-            {'A', 0},
-            {'B', 0},
-            {'C', 0},
-            {'D', 0}
+        private readonly Dictionary<char, Item> _items = new Dictionary<char, Item>
+        {
+            ['A'] = new ItemA(),
+            ['B'] = new ItemB(),
+            ['C'] = new ItemC(),
+            ['D'] = new ItemD()
         };
 
         public double Total() 
         { 
-            double total = 0;
-            foreach(var item in _items)
-            {
-                if(item.Key.Equals('A'))
-                {
-                    total += 50 * item.Value;
-                }
-                else if(item.Key.Equals('B'))
-                {
-                    total += AddB(item.Value.ToString());
-                } 
-                else if(item.Key.Equals('C'))
-                {
-                    total = AddItemC(total, item);
-                }
-                else total = AddItemD(total, item);
-            } 
-           return total;
-        }
-
-
-        private static double AddItemD(double total, KeyValuePair<char, int> item)
-        {
-            if (item.Key.Equals('D'))
-            {
-                total += 15 * item.Value;
-            }
-
-            return total;
-        }
-
-
-        private static double AddItemC(double total, KeyValuePair<char, int> item)
-        {
-            if (item.Key.Equals('C'))
-            {
-                total += 15 * item.Value;
-            }
-
-            return total;
-        }
-
-        public double AddB(string numberItems)
-        {
-            double items = Double.Parse(numberItems);
-
-            if(items == 0) return 0;
-
-            var cost = items * 30;
-                var numberOfPairs =  items / 2;
-
-            // discount is 15 on each pair
-            var discount = numberOfPairs * 15;
-            return cost - discount;
+            return _items.Select(i => i.Value.Total).Sum();
         }
 
         public void Scan(string items)
         {
-            foreach(var item in items)
+           foreach(var item in items)
             {
-                if (Char.IsLower(item))
-                {
-                    _items[Char.ToUpper(item)]++;
-                }
-                _items[item]++;  
+                _items[char.ToUpper(item)].Add();
             }
         }
     }
