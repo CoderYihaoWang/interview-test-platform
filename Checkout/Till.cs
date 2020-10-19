@@ -10,7 +10,8 @@ namespace Checkout
         private Dictionary<char, int> _items = new Dictionary<char, int>{
             {'A', 0},
             {'B', 0},
-            {'C', 0}
+            {'C', 0},
+            {'D', 0}
         };
 
         public double Total() 
@@ -35,15 +36,16 @@ namespace Checkout
            return total;
         }
 
-static double AddItemD(double total, KeyValuePair<char, int> item)
-{
-    if (item.Key.Equals('D'))
-    {
-        total += 15 * item.Value;
-    }
 
-    return total;
-}
+        private static double AddItemD(double total, KeyValuePair<char, int> item)
+        {
+            if (item.Key.Equals('D'))
+            {
+                total += 15 * item.Value;
+            }
+
+            return total;
+        }
 
 
         private static double AddItemC(double total, KeyValuePair<char, int> item)
@@ -74,6 +76,10 @@ static double AddItemD(double total, KeyValuePair<char, int> item)
         {
             foreach(var item in items)
             {
+                if (Char.IsLower(item))
+                {
+                    _items[Char.ToUpper(item)]++;
+                }
                 _items[item]++;  
             }
         }
